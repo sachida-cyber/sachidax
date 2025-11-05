@@ -80,13 +80,14 @@
       opacity: 1;
     }
 
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: transparent(6px);
-      z-index: 5;
-    }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.2); /* soft overlay */
+  backdrop-filter: blur(1px); /* tiny blur for smoothness */
+  z-index: 5;
+}
+
 
     .hero-content {
       position: relative;
